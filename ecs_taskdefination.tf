@@ -2,7 +2,7 @@ module "ecs_service" {
   source  = "terraform-aws-modules/ecs/aws//modules/service"
   version = "7.1.0"
 
-  name        = var.app_name
+  name        = "${var.app_name}-service"
   cluster_arn = module.ecs.cluster_arn
 
   # Initial desired tasks
@@ -22,9 +22,9 @@ module "ecs_service" {
   # --- Task Definition (bootstrap only) ---
   container_definitions = {
     nextjs = {
-      image  = "${module.ecr.repository_url}:latest"
-      cpu    = 512
-      memory = 1024
+      image     = "${module.ecr.repository_url}:latest"
+      cpu       = 512
+      memory    = 1024
       essential = true
 
       portMappings = [
@@ -64,13 +64,7 @@ module "ecs_service" {
     }
   }
 
-  tags = local.common_tags
-
-  # CRITICAL for CI/CD (ecspresso)
-  lifecycle {
-    ignore_changes = [
-      task_definition
-    ]
-  }
+  tags                           = local.common_tags
+  ignore_task_definition_changes = true
 }
 
