@@ -1,6 +1,6 @@
 module "ecr" {
   source          = "terraform-aws-modules/ecr/aws"
-  version         = "3.2.0"
+  version         = "3.1.0"
   repository_name = "${var.app_name}-ecr"
   repository_type = "private"
   repository_lifecycle_policy = jsonencode({

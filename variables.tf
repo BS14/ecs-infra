@@ -1,17 +1,17 @@
 locals {
   vpc_cidr = var.cidr
   common_tags = {
-    Project    = var.project
+    Project     = var.project
     Environment = var.env
-    Owner      = "Bnay14"
-    ManagedBy  = "Terraform"
+    Owner       = "Bnay14"
+    ManagedBy   = "Terraform"
   }
 }
 
 variable "app_name" {
-  type = string
+  type        = string
   description = "Name of Application"
-  default = "nextjs"
+  default     = "nextjs"
 }
 
 variable "cidr" {
@@ -27,7 +27,7 @@ variable "project" {
 }
 
 variable "env" {
-type = string
-description = "Name of Environment."
-default = "dev"
+  type        = string
+  description = "Name of Environment."
+  default     = "prod"
 }

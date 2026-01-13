@@ -10,7 +10,7 @@ data "aws_ami" "ecs" {
 
 module "ecs_asg" {
   source  = "terraform-aws-modules/autoscaling/aws"
-  version = "9.1..0"
+  version = "9.1.0"
 
   name = "${var.project}-${var.env}-ecs-asg"
 
