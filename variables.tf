@@ -1,5 +1,4 @@
 locals {
-  vpc_cidr = var.cidr
   common_tags = {
     Project     = var.project
     Environment = var.env
@@ -23,7 +22,7 @@ variable "cidr" {
 variable "project" {
   type        = string
   description = "Project Name."
-  default     = "ecs"
+  default     = "ca"
 }
 
 variable "env" {

@@ -1,24 +1,34 @@
-module "ecr" {
-  source          = "terraform-aws-modules/ecr/aws"
-  version         = "3.1.0"
-  repository_name = "${var.app_name}-ecr"
-  repository_type = "private"
-  repository_lifecycle_policy = jsonencode({
-    rules = [
-      {
-        rulePriority = 1,
-        description  = "Keep last 30 images",
-        selection = {
-          tagStatus     = "tagged",
-          tagPrefixList = ["v"],
-          countType     = "imageCountMoreThan",
-          countNumber   = 30
-        },
-        action = {
-          type = "expire"
-        }
-      }
-    ]
-  })
+resource "aws_ecr_repository" "ecr" {
+  name                 = "${var.project}-${var.app_name}"
+  image_tag_mutability = "IMMUTABLE"
+
+  image_scanning_configuration {
+    scan_on_push = true
+  }
+
   tags = local.common_tags
+}
+
+resource "aws_ecr_lifecycle_policy" "ecr_policy" {
+  repository = aws_ecr_repository.ecr.name
+
+  policy = <<EOF
+{
+  "rules": [
+    {
+      "rulePriority": 1,
+      "description": "Expire images older than 14 days",
+      "selection": {
+        "tagStatus": "untagged",
+        "countType": "sinceImagePushed",
+        "countUnit": "days",
+        "countNumber": 14
+      },
+      "action": {
+        "type": "expire"
+      }
+    }
+  ]
+}
+EOF
 }
